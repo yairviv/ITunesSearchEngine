@@ -1,4 +1,4 @@
 export default {
-    songs : [],
-  };
-  
+  songs: [],
+  song: {}
+};

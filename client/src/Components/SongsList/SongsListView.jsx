@@ -1,20 +1,29 @@
 import React from 'react';
-import { List, ListItemText } from '@material-ui/core';
 import { connect } from 'react-redux';
+import SongListItem from './SongListItem'
+import './Songs.css'
 const mapStateToProps = (state) => {
     return { items: state.songsList || [] }
 }
-function SongsListView(props) {
-    const listItems = props.items || [];
-    const listItemsJSX = listItems.map(item => <ListItemText
-        key={item.trackId}>{item}</ListItemText>);
+class SongsListView extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-    return ( <ul>
-        {listItems.map(song =>
-          <h1 key={song.trackId} >{song.trackName}</h1>
-        )}
-      </ul>
-    );
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (this.props.items !== prevProps.items) {
+            this.props.onListRefresh()
+        }
+    }
+    render() {
+        return (<ul className="resultsView">
+            {this.props.items.map(song =>
+                <SongListItem key={song.trackId} song={song}></SongListItem>
+            )}
+        </ul>
+        );
+    }
 }
 export default connect(mapStateToProps,
     null
