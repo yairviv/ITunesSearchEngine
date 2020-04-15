@@ -1,0 +1,15 @@
+.ituneDetails{
+    margin: 50px;
+}
+.player{
+    position: inherit;
+    text-align: -webkit-center;
+}
+.songImage{
+    display: grid;
+    margin-left: 75px;
+}
+
+.songHeader{
+    display: inline-flex;
+}
