@@ -6,8 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import { getSongsList } from '../../redux/actions/index';
 import { connect } from 'react-redux';
-
-
 import './Songs.css'
 const mapDispatchToProps = (dispatch, ownProps) => ({
     getSongs: (item) => dispatch(getSongsList(item)),
@@ -22,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 function SongsListInput(props) {
-
+    var userItems = JSON.parse(localStorage.getItem('userItems'));
     const [item, setItem] = useState('');
     const [errorFlag, setErrorFlag] = useState(false);
 
@@ -38,13 +36,42 @@ function SongsListInput(props) {
         if (item.trim() !== '') {
             props.getSongs(item);
             props.onClick();
-            setErrorFlag(false)
+            setErrorFlag(false);
+            fillSearchHistory(item);
         } else {
             setErrorFlag(true);
         }
     }
+    function fillSearchHistory(item) {
+        if (!userItems || !userItems.items) {
+            userItems = { items: [] };
+        }
+        let storedItem = userItems.items.find(storedItem => storedItem.name == item);
+        let storedItemIndex = userItems.items.indexOf(storedItem);
+        if (storedItemIndex == -1) {
+            if (userItems.items.length == 10) {
+                removeItemFromUserItems();
+            }
+            userItems.items.push({ name: item, counter: 1 });
+            localStorage.setItem('userItems', JSON.stringify(userItems))
+        } else {
+            let counter = userItems.items[storedItemIndex].counter;
+            userItems.items.splice(storedItemIndex, 1, { name: item, counter: counter + 1 });
+            localStorage.setItem('userItems', JSON.stringify(userItems))
+        }
+    }
 
-    const classes = useStyles();
+    function removeItemFromUserItems() {
+        let itemToRemoveIndex;
+        let minCounter = userItems.items[0].counter;
+        for (let item of userItems.items) {
+            if (item.counter <= minCounter) {
+                itemToRemoveIndex = userItems.items.indexOf(item);
+            }
+        }
+        userItems.items.splice(itemToRemoveIndex, 1);
+    }
+
 
     return (
         <div>

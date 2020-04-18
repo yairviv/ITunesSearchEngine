@@ -16,6 +16,18 @@ class usersRepository {
     async inserUser(userName) {
         var User = mongoose.model('user', this.UserSchema);
         var newUser = new User({ userName: userName });
+        newUser.save(function (err, user) {
+            if (err) return console.error(err);
+            console.debug(user.username)
+            return user.userName;
+        });
+    }
+
+    /*
+
+    async inserUser(userName) {
+        var User = mongoose.model('user', this.UserSchema);
+        var newUser = new User({ userName: userName });
         User.findOne({ 'userName': userName }, function (err, fetchedUser) {
             if (err) return handleError(err);
             console.log(fetchedUser)
@@ -23,10 +35,13 @@ class usersRepository {
                 newUser.save(function (err, user) {
                     if (err) return console.error(err);
                     console.debug(user.username)
+                    return user.userName;
                 });
             }
         });
     }
+    */
+
 }
 
 module.exports = new usersRepository();
