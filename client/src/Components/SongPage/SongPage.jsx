@@ -49,10 +49,10 @@ function SongPage(props) {
                     Release Date:  {date}
                 </Typography>
                 <Typography variant="h4" gutterBottom>
-                    Album Price: {song.collectionPrice}
+                    Album Price: {song.collectionPrice}$
                 </Typography>
                 <Typography variant="h4" gutterBottom>
-                    Itune Price {song.trackPrice}
+                    Itune Price {song.trackPrice}$
                 </Typography>
             </div>
             <div className="player">{player()}</div>
