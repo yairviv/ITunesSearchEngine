@@ -3,6 +3,7 @@
 */
 export const GET_SONGS_LIST = 'GET_SONGS_LIST'
 export const CREATE_USER = 'CREATE_USER'
+export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
 /*
  * action creators
 */
@@ -17,6 +18,10 @@ export const getSongsList = (artistName) => dispatch => {
 export const createUser = (userName) => dispatch => {
     return fetch('/api/users/' + userName)
         .then(userName => dispatch({ type: CREATE_USER, payload: userName }))
+}
+
+export const addItemToCart = (itune) => dispatch => {
+    dispatch({ type: ADD_ITEM_TO_CART, payload: itune })
 }
 /*
 export const updateSong = (song) => dispatch => {
