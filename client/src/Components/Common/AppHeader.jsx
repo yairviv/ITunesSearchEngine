@@ -1,11 +1,19 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import LoginDialog from './../user/LoginDialog'
+import UserSideBar from '../Common/UserSideBar';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+  return { cart: state.cart || { items: [] } }
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,9 +25,22 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  cartButton: {
+    color: 'white'
+  }
 }));
 
-export default function AppHeader() {
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+    color: 'lightgrey'
+  },
+}))(Badge);
+
+function AppHeader(props) {
   const classes = useStyles();
 
   return (
@@ -32,9 +53,17 @@ export default function AppHeader() {
           <Typography variant="h6" className={classes.title}>
             ITunes search engine
           </Typography>
-          <Button color="inherit">Login</Button>
+          <IconButton aria-label="cart">
+            <StyledBadge badgeContent={props.cart.items.length}>
+              <ShoppingCartIcon className={classes.cartButton} />
+            </StyledBadge>
+          </IconButton>
+          <UserSideBar></UserSideBar>
+          <LoginDialog></LoginDialog>
         </Toolbar>
       </AppBar>
     </div>
   );
 }
+
+export default connect(mapStateToProps, null)(AppHeader);

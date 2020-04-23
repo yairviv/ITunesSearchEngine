@@ -1,11 +1,22 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import { addItemToCart } from '../../redux/actions/index';
+import { connect } from 'react-redux';
 import './Song.css'
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    addItemToCart: (iTune) => dispatch(addItemToCart(iTune)),
+});
+
 const useStyles = makeStyles({
-    root: {
-        width: '100%',
+    cartButton: {
+        width: '70px',
         maxWidth: 500,
+        height: '70px',
     },
 });
 
@@ -15,6 +26,9 @@ function SongPage(props) {
     const date = new Date(song.releaseDate).toLocaleDateString();
     function isAudio() {
         return song.previewUrl.substring(song.previewUrl.length - 4, song.previewUrl.length) == '.m4a';
+    }
+    function AddClickHandler() {
+        props.addItemToCart(song);
     }
 
     function player() {
@@ -49,15 +63,20 @@ function SongPage(props) {
                     Release Date:  {date}
                 </Typography>
                 <Typography variant="h4" gutterBottom>
-                    Album Price: {song.collectionPrice}
+                    Album Price: {song.collectionPrice}$
                 </Typography>
                 <Typography variant="h4" gutterBottom>
-                    Itune Price {song.trackPrice}
+                    Itune Price {song.trackPrice}$
                 </Typography>
+                <Tooltip title="add to shopping cart">
+                    <IconButton onClick={AddClickHandler} color="primary">
+                        < AddShoppingCartIcon className={classes.cartButton} />
+                    </IconButton>
+                </Tooltip>
             </div>
             <div className="player">{player()}</div>
 
         </div>
     );
 }
-export default SongPage
+export default connect(null, mapDispatchToProps)(SongPage)

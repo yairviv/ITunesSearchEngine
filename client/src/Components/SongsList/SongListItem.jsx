@@ -22,14 +22,14 @@ function SongListItem(props) {
         <div className="ituneCard">
             <Card className={classes.root}>
                 <CardActionArea>
-                    <Link key={song.trackId} to={{ pathname: 'song', state: { Itune: song } }}>    <CardMedia
+                    <Link key={song.trackId} to={{ pathname: `song/${song.trackId}`, state: { Itune: song } }}><CardMedia
                         component="img"
                         height="140"
                         image={song.artworkUrl100}
                     /></Link>
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
-                            <Link key={song.trackId} to={{ pathname: 'song', state: { Itune: song } }}>{song.trackName}</Link>
+                            <Link key={song.trackId} to={{ pathname: `song/${song.trackId}`, state: { Itune: song } }}>{song.trackName}</Link>
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
                             {song.artistName}
