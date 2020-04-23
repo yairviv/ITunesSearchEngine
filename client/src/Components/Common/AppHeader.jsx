@@ -6,9 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import LoginDialog from './../user/LoginDialog'
 import UserSideBar from '../Common/UserSideBar';
+import SettingsModal from './SettingsModal';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
@@ -18,9 +18,6 @@ const mapStateToProps = (state) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -47,9 +44,7 @@ function AppHeader(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
+          <SettingsModal></SettingsModal>
           <Typography variant="h6" className={classes.title}>
             ITunes search engine
           </Typography>

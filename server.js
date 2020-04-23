@@ -5,8 +5,14 @@ const usersRepository = require('./DataAccess/usersRepository');
 const app = express();
 const url = 'https://itunes.apple.com/search?term=';
 app.get('/api/songs/:artistName', (req, res) => {
-  rp(url + req.params.artistName + '&limit=25')
-
+  let finalUrl = url + req.params.artistName;
+  if (req.params.artistName.limit !== undefined) {
+    finalUrl = finalUrl + `limit=${req.params.artistName.limit}`
+  }
+  if (req.params.artistName.entity !== undefined) {
+    finalUrl = finalUrl + `entity=${req.params.artistName.entity}`
+  }
+  rp(finalUrl)
     .then(function (response) {
       res.send(response);
     })
