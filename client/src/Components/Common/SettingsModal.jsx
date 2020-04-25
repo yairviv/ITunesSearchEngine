@@ -4,8 +4,11 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import MenuIcon from '@material-ui/icons/Menu';
+import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Slider from './LimitSlider';
 import DropDown from './DropDown';
+
 import searchCriterias from '../../assets/searchCriterias'
 
 
@@ -58,7 +61,13 @@ export default function SettingsModal() {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        <DropDown label={'Movie'} options={searchCriterias.movie} ></DropDown>
+                        <Typography variant="h5" gutterBottom>
+                            Search Settings:
+                    </Typography>
+                        <Slider></Slider>
+                        <DropDown label={'movie'}></DropDown>
+                        <DropDown label={'music'}></DropDown>
+                        <DropDown label={'podcast'}></DropDown>
                         <DropDown></DropDown>
                     </div>
                 </Fade>

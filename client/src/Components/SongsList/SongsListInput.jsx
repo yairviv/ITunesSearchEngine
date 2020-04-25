@@ -5,11 +5,14 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import { getSongsList } from '../../redux/actions/index';
-import { connect } from 'react-redux';
 import './Songs.css'
+import { connect } from 'react-redux';
 const mapDispatchToProps = (dispatch, ownProps) => ({
     getSongs: (item) => dispatch(getSongsList(item)),
 });
+const mapStateToProps = (state) => {
+    return { settings: state.settings || { limit: 25 } }
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +37,7 @@ function SongsListInput(props) {
     };
     function SearchClickHandler() {
         if (item.trim() !== '') {
-            props.getSongs(item);
+            props.getSongs({ song: item, limit: props.settings.limit, entity: props.settings.entity });
             props.onClick();
             setErrorFlag(false);
             fillSearchHistory(item);
@@ -88,4 +91,4 @@ function SongsListInput(props) {
 
     );
 }
-export default connect(null, mapDispatchToProps)(SongsListInput)
+export default connect(mapStateToProps, mapDispatchToProps)(SongsListInput)

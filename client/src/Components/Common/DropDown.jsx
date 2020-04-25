@@ -6,22 +6,23 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import searchCriterias from '../../assets/searchCriterias'
-
+import {updateSettings} from '../../redux/actions/index'
+import { connect } from 'react-redux';
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    updateSettings: (item) => dispatch(updateSettings(item)),
+});
 
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
     },
 }));
-const creterias = searchCriterias;
 
-
-export default function DropDown(props) {
+function DropDown(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
-    let label = props.label;
-    const options = creterias['movie'];
+    const options = searchCriterias[props.label] || [];
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
@@ -29,6 +30,7 @@ export default function DropDown(props) {
 
     const handleMenuItemClick = (event, index) => {
         setSelectedIndex(index);
+        props.updateSettings([props.label, options[index]])
         setAnchorEl(null);
     };
 
@@ -59,7 +61,6 @@ export default function DropDown(props) {
                 {options.map((option, index) => (
                     <MenuItem
                         key={option}
-                        disabled={index === 0}
                         selected={index === selectedIndex}
                         onClick={(event) => handleMenuItemClick(event, index)}
                     >
@@ -70,3 +71,5 @@ export default function DropDown(props) {
         </div>
     );
 }
+
+export default connect(null, mapDispatchToProps)(DropDown)
