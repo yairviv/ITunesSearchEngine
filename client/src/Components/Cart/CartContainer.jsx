@@ -1,27 +1,39 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import { addItemToCart } from '../../redux/actions/index';
+import CartItem from './CartItem';
 import { connect } from 'react-redux';
-import './Song.css'
+import CartLogo from '../../assets/shopping-cart.svg';
+import './Cart.css'
+const _ = require('lodash');
+
+const mapStateToProps = (state) => {
+    return { items: state.cart.items || [] }
+}
 
 
-const useStyles = makeStyles({
-    cartButton: {
-        width: '70px',
-        maxWidth: 500,
-        height: '70px',
-    },
-});
 
 function CartContainer(props) {
-
+    const cartItemsObj = _.groupBy(props.items, 'trackId') || {};
+    const cartItemsArray = Object.values(cartItemsObj);
+    var temp = '';
     return (
         <div>
+            <div className="cartImageWrapper">
+                <img className="cartImage" src={CartLogo}></img>
+                <Typography variant="h4" gutterBottom>
+                    My Cart
+                </Typography>
+                <div className="cartItemsWrapper">
+                    <ul>
+                        {cartItemsArray.map(item =>
+                            <CartItem key={cartItemsArray[cartItemsArray.indexOf(item)]} cartItem={item}></CartItem>
+                        )}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 }
-export default CartContainer
+export default connect(mapStateToProps,
+    null
+)(CartContainer);

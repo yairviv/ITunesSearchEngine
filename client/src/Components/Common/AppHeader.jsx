@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import LoginDialog from './../user/LoginDialog'
 import UserSideBar from '../Common/UserSideBar';
 import SettingsModal from './SettingsModal';
+import { BrowserRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
@@ -48,11 +49,16 @@ function AppHeader(props) {
           <Typography variant="h6" className={classes.title}>
             ITunes search engine
           </Typography>
-          <IconButton aria-label="cart">
-            <StyledBadge badgeContent={props.cart.items.length}>
-              <ShoppingCartIcon className={classes.cartButton} />
-            </StyledBadge>
-          </IconButton>
+
+          <Link to={{ pathname: '/cart' }}>
+            <IconButton aria-label="cart">
+              <StyledBadge badgeContent={props.cart.items.length}>
+                <ShoppingCartIcon className={classes.cartButton} />
+              </StyledBadge>
+            </IconButton>
+          </Link>
+
+
           <UserSideBar></UserSideBar>
           <LoginDialog></LoginDialog>
         </Toolbar>

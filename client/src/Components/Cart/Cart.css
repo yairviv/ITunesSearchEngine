@@ -1,0 +1,15 @@
+.cartImage{
+    max-width: 200px;
+}
+
+.cartImageWrapper{
+    text-align: center;
+}
+.carItemDetailsWrapper{
+    display: flex;
+}
+.cartItemDetail{
+
+}
+.cartItemsWrapper{
+}
