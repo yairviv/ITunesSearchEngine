@@ -4,6 +4,8 @@
 export const GET_SONGS_LIST = 'GET_SONGS_LIST'
 export const CREATE_USER = 'CREATE_USER'
 export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
+export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART'
+export const REMOVE_ITUNE_FROM_CART = 'REMOVE_ITUNE_FROM_CART'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 /*
  * action creators
@@ -30,6 +32,15 @@ export const createUser = (userName) => dispatch => {
 
 export const addItemToCart = (itune) => dispatch => {
     dispatch({ type: ADD_ITEM_TO_CART, payload: itune })
+}
+
+
+export const removeItemFromCart = (itune) => dispatch => {
+    dispatch({ type: REMOVE_ITEM_FROM_CART, payload: itune })
+}
+
+export const removeItuneFromCart = (itune) => dispatch => {
+    dispatch({ type: REMOVE_ITEM_FROM_CART, payload: itune })
 }
 
 export const updateSettings = (settingsObj) => dispatch => {

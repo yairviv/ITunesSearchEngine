@@ -11,7 +11,7 @@ import UserSideBar from '../Common/UserSideBar';
 import SettingsModal from './SettingsModal';
 import { BrowserRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import './Common.css'
 const mapStateToProps = (state) => {
   return { cart: state.cart || { items: [] } }
 }
@@ -46,9 +46,14 @@ function AppHeader(props) {
       <AppBar position="static">
         <Toolbar>
           <SettingsModal></SettingsModal>
-          <Typography variant="h6" className={classes.title}>
-            ITunes search engine
+
+          <div className={classes.title}>
+            <Link className='homeLink' to={{ pathname: '/' }} >
+              <Typography variant="h6">
+                ITunes search engine
           </Typography>
+            </Link>
+          </div>
 
           <Link to={{ pathname: '/cart' }}>
             <IconButton aria-label="cart">

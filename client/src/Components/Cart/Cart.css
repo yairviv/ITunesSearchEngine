@@ -9,7 +9,14 @@
     display: flex;
 }
 .cartItemDetail{
-
+margin: auto;
 }
-.cartItemsWrapper{
+.cartItemSpan{
+    width: -webkit-fill-available
+}
+.cartItemWrapper{
+    display: flex
+}
+.minusButton{
+    margin-top: 20px
 }

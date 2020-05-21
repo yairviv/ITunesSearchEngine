@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    getSongs: (item) => dispatch(getSongsList(item)),
+    getSongs: (item) => dispatch(getSongsList({ song: item })),
 });
 
 const useStyles = makeStyles({
@@ -35,8 +35,9 @@ function UserSideBar(props) {
             props.getSongs(item);
         }
     }, [item]);
-    async function SearchClickHandler(e) {
-        setItem(e.target.textContent);
+    async function SearchClickHandler(name) {
+        setItem(name);
+        props.getSongs(name);
 
     }
     const toggleDrawer = (anchor, open) => (event) => {
@@ -61,7 +62,7 @@ function UserSideBar(props) {
                 <div>
                     <List>
                         {JSON.parse(localStorage.getItem('userItems')).items.map((item) => (
-                            <ListItem button key={item.name} onClick={SearchClickHandler}>
+                            <ListItem button key={item.name} onClick={() => SearchClickHandler(item.name)}>
                                 <ListItemText primary={item.name} />
                             </ListItem>
                         ))}
