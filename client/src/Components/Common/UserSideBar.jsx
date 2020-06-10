@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getSongsList } from '../../redux/actions/index';
 import { connect } from 'react-redux';
+import AppHeaderContext from '../../contexts/AppHeaderContext'
 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -24,14 +25,15 @@ const useStyles = makeStyles({
 });
 
 function UserSideBar(props) {
+    const appheaderFlags = useContext(AppHeaderContext);
     const classes = useStyles();
     const [state, setState] = React.useState({
         left: false,
     });
 
     const [item, setItem] = useState('');
-    useEffect(() => {
-        if (item.trim() != '') {
+    useEffect((props) => {
+        if (item.trim() !== '') {
             props.getSongs(item);
         }
     }, [item]);
@@ -58,7 +60,7 @@ function UserSideBar(props) {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            {JSON.parse(localStorage.getItem('userItems')) != undefined &&
+            {JSON.parse(localStorage.getItem('userItems')) !== undefined &&
                 <div>
                     <List>
                         {JSON.parse(localStorage.getItem('userItems')).items.map((item) => (
@@ -74,7 +76,7 @@ function UserSideBar(props) {
 
     return (
         <div>
-            <Button color='inherit' onClick={toggleDrawer('left', true)}>My Searches</Button>
+            <Button disabled={appheaderFlags.data.disableUserSearchesButton} color='inherit' onClick={toggleDrawer('left', true)}>My Searches</Button>
             <Drawer anchor='left' open={state['left']} onClose={toggleDrawer('left', false)}>
                 {list('left')}
             </Drawer>

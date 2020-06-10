@@ -9,9 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Slider from './LimitSlider';
 import DropDown from './DropDown';
 
-import searchCriterias from '../../assets/searchCriterias'
-
-
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: 'flex',

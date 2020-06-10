@@ -1,18 +1,32 @@
-import React from 'react'; import {
+import React, { useState } from 'react'; import {
     BrowserRouter as Router, Switch,
-    Route,
+    Route
 } from 'react-router-dom';
 import SongPage from '../SongPage/SongPage';
 import SongsContainer from '../SongsList/SongsContainer';
 import AppHeader from '../Common/AppHeader'
 import cartContainer from '../Cart/CartContainer'
+import { AppHeaderContextProvider } from '../../contexts/AppHeaderContext'
+
 
 function AppContainer() {
+    const [headerFlags, setheaderFlags] = useState({
+        disableUserSearchesButton: false
+    });
+    const headerOptions = {
+        data: headerFlags,
+        changeFlags: (value) => setheaderFlags({ disableUserSearchesButton: value }),
+    }
+
     return (
         <Router> <div>
-            <AppHeader></AppHeader>
+            <AppHeaderContextProvider value={headerOptions}>
+                <AppHeader></AppHeader>
+            </AppHeaderContextProvider>
             <Switch>
-                <Route exact path="/"> <SongsContainer />
+                <Route exact path="/"> <AppHeaderContextProvider value={headerOptions}>
+                    <SongsContainer />
+                </AppHeaderContextProvider>
                     ￼</Route>
                 <Route path="/song" component={SongPage}>
                 </Route>

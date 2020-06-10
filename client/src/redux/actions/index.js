@@ -14,10 +14,10 @@ export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 
 export const getSongsList = (query) => dispatch => {
     let url = '/api/songs/' + query.song;
-    if (query.limit != undefined) {
+    if (query.limit !== undefined) {
         url = url + `&limit=${query.limit}`;
     }
-    if (query.entity != undefined) {
+    if (query.entity !== undefined) {
         url = url + `&entity=${query.entity}`;
     }
     return fetch(url)

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import { getSongsList } from '../../redux/actions/index';
-import './Songs.css'
+import './Songs.css';
 import { connect } from 'react-redux';
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
     getSongs: (item) => dispatch(getSongsList(item)),
 });
@@ -14,14 +14,6 @@ const mapStateToProps = (state) => {
     return { settings: state.settings || { limit: 25 } }
 }
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-}));
 function SongsListInput(props) {
     var userItems = JSON.parse(localStorage.getItem('userItems'));
     const [item, setItem] = useState('');
@@ -49,10 +41,10 @@ function SongsListInput(props) {
         if (!userItems || !userItems.items) {
             userItems = { items: [] };
         }
-        let storedItem = userItems.items.find(storedItem => storedItem.name == item);
+        let storedItem = userItems.items.find(storedItem => storedItem.name === item);
         let storedItemIndex = userItems.items.indexOf(storedItem);
-        if (storedItemIndex == -1) {
-            if (userItems.items.length == 10) {
+        if (storedItemIndex === -1) {
+            if (userItems.items.length === 10) {
                 removeItemFromUserItems();
             }
             userItems.items.push({ name: item, counter: 1 });

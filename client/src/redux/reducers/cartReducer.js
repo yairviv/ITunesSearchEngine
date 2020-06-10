@@ -12,7 +12,7 @@ function manageCart(cart = initialState.cart, action) {
                 items: [...cart.items]
             };
         case REMOVE_ITEM_FROM_CART:
-            let iTune = cart.items.find(item => item.trackId == action.payload.cartItem)
+            let iTune = cart.items.find(item => item.trackId === action.payload.cartItem)
             let index = cart.items.indexOf(iTune);
             cart.items.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart))
@@ -20,7 +20,7 @@ function manageCart(cart = initialState.cart, action) {
                 items: [...cart.items]
             };
         case REMOVE_ITUNE_FROM_CART:
-            cart.items = cart.items.filter(item => item.trackId != action.payload.cartItem)
+            cart.items = cart.items.filter(item => item.trackId !== action.payload.cartItem)
             localStorage.setItem('cart', JSON.stringify(cart))
             return {
                 items: [...cart.items]

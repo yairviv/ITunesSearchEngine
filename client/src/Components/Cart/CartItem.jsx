@@ -9,7 +9,7 @@ function CartItem(props) {
         <div>
             <div className="carItemDetailsWrapper">
                 <span>
-                    <img src={props.cartItem[0].artworkUrl100} />
+                    <img src={props.cartItem[0].artworkUrl100} alt='' />
                 </span>
                 <span className='cartItemDetail'>{props.cartItem[0].trackName}</span>
                 <span className='cartItemDetail'>Quantity: {props.cartItem.length}</span>

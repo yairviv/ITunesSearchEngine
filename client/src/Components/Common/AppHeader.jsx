@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,7 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import LoginDialog from './../user/LoginDialog'
 import UserSideBar from '../Common/UserSideBar';
 import SettingsModal from './SettingsModal';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import AppHeaderContext from '../../contexts/AppHeaderContext'
+
 import { connect } from 'react-redux';
 import './Common.css'
 const mapStateToProps = (state) => {
@@ -40,6 +42,15 @@ const StyledBadge = withStyles((theme) => ({
 
 function AppHeader(props) {
   const classes = useStyles();
+  const appheaderFlags = useContext(AppHeaderContext);
+
+  function mainLinkClickHandler() {
+    appheaderFlags.changeFlags(false)
+  }
+
+  function cartLinkClickHandler() {
+    appheaderFlags.changeFlags(true)
+  }
 
   return (
     <div className={classes.root}>
@@ -48,14 +59,14 @@ function AppHeader(props) {
           <SettingsModal></SettingsModal>
 
           <div className={classes.title}>
-            <Link className='homeLink' to={{ pathname: '/' }} >
+            <Link className='homeLink' to={{ pathname: '/' }} onClick={mainLinkClickHandler} >
               <Typography variant="h6">
                 ITunes search engine
           </Typography>
             </Link>
           </div>
 
-          <Link to={{ pathname: '/cart' }}>
+          <Link to={{ pathname: '/cart' }} onClick={cartLinkClickHandler} >
             <IconButton aria-label="cart">
               <StyledBadge badgeContent={props.cart.items.length}>
                 <ShoppingCartIcon className={classes.cartButton} />

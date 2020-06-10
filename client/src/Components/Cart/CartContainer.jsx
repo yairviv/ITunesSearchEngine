@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import CartItem from './CartItem';
 import { connect } from 'react-redux';
@@ -48,7 +48,7 @@ function CartContainer(props) {
         <div>
             <div>
                 <div className="cartImageWrapper">
-                    <img className="cartImage" src={CartLogo}></img>
+                    <img className="cartImage" src={CartLogo} alt=''></img>
                     <Typography variant="h4" gutterBottom>
                         My Cart
                 </Typography>
@@ -56,7 +56,7 @@ function CartContainer(props) {
                 <div>
                     <ul>
                         {cartItemsArray.map(item =>
-                            <div className="cartItemWrapper" key={cartItemsArray[cartItemsArray.indexOf(item)]}>
+                            <div className="cartItemWrapper" key={cartItemsArray.indexOf(item)}>
                                 <span className='cartItemSpan'>
                                     <CartItem cartItem={item}></CartItem>
                                 </span>

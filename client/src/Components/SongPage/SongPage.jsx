@@ -36,7 +36,7 @@ function SongPage(props) {
     const [open, setOpen] = React.useState(false);
     const date = new Date(song.releaseDate).toLocaleDateString();
     function isAudio() {
-        return song.previewUrl.substring(song.previewUrl.length - 4, song.previewUrl.length) == '.m4a';
+        return song.previewUrl.substring(song.previewUrl.length - 4, song.previewUrl.length) === '.m4a';
     }
     function AddClickHandler() {
         props.addItemToCart(song);
@@ -59,7 +59,7 @@ function SongPage(props) {
             <div className="ituneDetails">
                 <div className="songHeader">
                     <span>
-                        <img src={song.artworkUrl100} />
+                        <img src={song.artworkUrl100} alt='' />
                     </span>
                     <span>  <Typography variant="h2" gutterBottom>
                         {song.trackName}
