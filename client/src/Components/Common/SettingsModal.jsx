@@ -65,7 +65,6 @@ export default function SettingsModal() {
                         <DropDown label={'movie'}></DropDown>
                         <DropDown label={'music'}></DropDown>
                         <DropDown label={'podcast'}></DropDown>
-                        <DropDown></DropDown>
                     </div>
                 </Fade>
             </Modal>

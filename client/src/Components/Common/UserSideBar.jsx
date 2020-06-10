@@ -32,7 +32,7 @@ function UserSideBar(props) {
     });
 
     const [item, setItem] = useState('');
-    useEffect((props) => {
+    useEffect(() => {
         if (item.trim() !== '') {
             props.getSongs(item);
         }
