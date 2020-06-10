@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,11 +6,14 @@ import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import LoginDialog from './../user/LoginDialog'
 import UserSideBar from '../Common/UserSideBar';
-import { connect } from 'react-redux';
+import SettingsModal from './SettingsModal';
+import { Link } from 'react-router-dom';
+import AppHeaderContext from '../../contexts/AppHeaderContext'
 
+import { connect } from 'react-redux';
+import './Common.css'
 const mapStateToProps = (state) => {
   return { cart: state.cart || { items: [] } }
 }
@@ -18,9 +21,6 @@ const mapStateToProps = (state) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -42,22 +42,39 @@ const StyledBadge = withStyles((theme) => ({
 
 function AppHeader(props) {
   const classes = useStyles();
+  const appheaderFlags = useContext(AppHeaderContext);
+
+  function mainLinkClickHandler() {
+    appheaderFlags.changeFlags(false)
+  }
+
+  function cartLinkClickHandler() {
+    appheaderFlags.changeFlags(true)
+  }
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            ITunes search engine
+          <SettingsModal></SettingsModal>
+
+          <div className={classes.title}>
+            <Link className='homeLink' to={{ pathname: '/' }} onClick={mainLinkClickHandler} >
+              <Typography variant="h6">
+                ITunes search engine
           </Typography>
-          <IconButton aria-label="cart">
-            <StyledBadge badgeContent={props.cart.items.length}>
-              <ShoppingCartIcon className={classes.cartButton} />
-            </StyledBadge>
-          </IconButton>
+            </Link>
+          </div>
+
+          <Link to={{ pathname: '/cart' }} onClick={cartLinkClickHandler} >
+            <IconButton aria-label="cart">
+              <StyledBadge badgeContent={props.cart.items.length}>
+                <ShoppingCartIcon className={classes.cartButton} />
+              </StyledBadge>
+            </IconButton>
+          </Link>
+
+
           <UserSideBar></UserSideBar>
           <LoginDialog></LoginDialog>
         </Toolbar>

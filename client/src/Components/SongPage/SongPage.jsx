@@ -1,4 +1,6 @@
 import React from 'react';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -12,23 +14,36 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     addItemToCart: (iTune) => dispatch(addItemToCart(iTune)),
 });
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
     cartButton: {
         width: '70px',
         maxWidth: 500,
         height: '70px',
-    },
-});
+    }
+}));
+
 
 function SongPage(props) {
     const song = props.location.state.Itune;
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
     const date = new Date(song.releaseDate).toLocaleDateString();
     function isAudio() {
-        return song.previewUrl.substring(song.previewUrl.length - 4, song.previewUrl.length) == '.m4a';
+        return song.previewUrl.substring(song.previewUrl.length - 4, song.previewUrl.length) === '.m4a';
     }
     function AddClickHandler() {
         props.addItemToCart(song);
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(false);
     }
 
     function player() {
@@ -44,7 +59,7 @@ function SongPage(props) {
             <div className="ituneDetails">
                 <div className="songHeader">
                     <span>
-                        <img src={song.artworkUrl100} />
+                        <img src={song.artworkUrl100} alt='' />
                     </span>
                     <span>  <Typography variant="h2" gutterBottom>
                         {song.trackName}
@@ -73,10 +88,16 @@ function SongPage(props) {
                         < AddShoppingCartIcon className={classes.cartButton} />
                     </IconButton>
                 </Tooltip>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success">
+                        Item has been added to cart !
+        </Alert>
+                </Snackbar>
             </div>
             <div className="player">{player()}</div>
 
         </div>
     );
 }
+
 export default connect(null, mapDispatchToProps)(SongPage)
