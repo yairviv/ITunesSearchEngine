@@ -38,7 +38,7 @@ function SongsListInput(props) {
         }
     }
     function fillSearchHistory(item) {
-        if (!userItems || !userItems.items) {
+        if (!userItems || !userItems.items || userItems == null) {
             userItems = { items: [] };
         }
         let storedItem = userItems.items.find(storedItem => storedItem.name === item);

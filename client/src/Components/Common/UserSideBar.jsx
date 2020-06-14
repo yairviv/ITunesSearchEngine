@@ -60,7 +60,7 @@ function UserSideBar(props) {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            {JSON.parse(localStorage.getItem('userItems')) !== undefined &&
+            {JSON.parse(localStorage.getItem('userItems')) !== undefined && JSON.parse(localStorage.getItem('userItems')) !== null &&
                 <div>
                     <List>
                         {JSON.parse(localStorage.getItem('userItems')).items.map((item) => (
