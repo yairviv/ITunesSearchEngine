@@ -40,7 +40,7 @@ export const removeItemFromCart = (itune) => dispatch => {
 }
 
 export const removeItuneFromCart = (itune) => dispatch => {
-    dispatch({ type: REMOVE_ITEM_FROM_CART, payload: itune })
+    dispatch({ type: REMOVE_ITUNE_FROM_CART, payload: itune })
 }
 
 export const updateSettings = (settingsObj) => dispatch => {
