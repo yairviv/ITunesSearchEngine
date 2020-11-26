@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
-import LoginDialog from './../user/LoginDialog'
+import LoginDialog from './../user/LoginDialog';
+import RegisterDialog from './../user/RegisterDialog'
 import UserSideBar from '../Common/UserSideBar';
 import SettingsModal from './SettingsModal';
 import { Link } from 'react-router-dom';
@@ -76,6 +77,7 @@ function AppHeader(props) {
 
 
           <UserSideBar></UserSideBar>
+          <RegisterDialog></RegisterDialog>
           <LoginDialog></LoginDialog>
         </Toolbar>
       </AppBar>

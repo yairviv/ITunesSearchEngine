@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /*
  * action types
 */
@@ -25,8 +27,8 @@ export const getSongsList = (query) => dispatch => {
         .then(songs => dispatch({ type: GET_SONGS_LIST, payload: songs.results }))
 }
 
-export const createUser = (userName) => dispatch => {
-    return fetch('/api/users/' + userName)
+export const createUser = (user) => dispatch => {
+    return axios.post('/api/users', { user: user })
         .then(userName => dispatch({ type: CREATE_USER, payload: userName }))
 }
 
