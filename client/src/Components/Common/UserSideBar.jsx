@@ -37,6 +37,7 @@ function UserSideBar(props) {
             props.getSongs(item);
         }
     }, [item]);
+    
     async function SearchClickHandler(name) {
         setItem(name);
         props.getSongs(name);
@@ -60,7 +61,7 @@ function UserSideBar(props) {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            {JSON.parse(localStorage.getItem('userItems')) !== undefined &&
+            {JSON.parse(localStorage.getItem('userItems')) !== undefined && JSON.parse(localStorage.getItem('userItems')) !== null &&
                 <div>
                     <List>
                         {JSON.parse(localStorage.getItem('userItems')).items.map((item) => (

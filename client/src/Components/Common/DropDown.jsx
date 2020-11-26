@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import searchCriterias from '../../assets/searchCriterias'
-import {updateSettings} from '../../redux/actions/index'
+import { updateSettings } from '../../redux/actions/index'
 import { connect } from 'react-redux';
 const mapDispatchToProps = (dispatch, ownProps) => ({
     updateSettings: (item) => dispatch(updateSettings(item)),
