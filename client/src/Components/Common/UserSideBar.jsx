@@ -37,6 +37,7 @@ function UserSideBar(props) {
             props.getSongs(item);
         }
     }, [item]);
+    
     async function SearchClickHandler(name) {
         setItem(name);
         props.getSongs(name);
