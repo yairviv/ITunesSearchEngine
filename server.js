@@ -1,13 +1,18 @@
 const express = require('express');
 var rp = require('request-promise');
 const usersRepository = require('./DataAccess/usersRepository');
-var bodyParser = require('body-parser')
-var bcrypt = require('bcrypt')
-
+var bodyParser = require('body-parser');
+var bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 const app = express();
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(express.json());
 const url = 'https://itunes.apple.com/search?term=';
-app.get('/api/songs/:artistName', (req, res) => {
+
+const refreshTokens = [];
+
+app.get('/api/songs/:artistName', authenticateToken, (req, res) => {
   let finalUrl = url + req.params.artistName;
   if (req.params.artistName.limit !== undefined) {
     finalUrl = finalUrl + `&limit=${req.params.artistName.limit}`
@@ -50,12 +55,59 @@ app.post('/api/login', async (req, res) => {
   let dbPass = users[0].userPassword;
   bcrypt.compare(req.body.user.password, dbPass).then(function (result) {
     if (result == true) {
-      return res.status(200).send('Success');
+      const userName = req.body.user.userName;
+      const user = { userName: userName };
+      const accessToken = generateAccessToken(user);
+      const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+      refreshTokens.push(refreshToken);
+      res.json({ accessToken: accessToken, refreshToken: refreshToken });
     } else {
       return res.status(501).send('Not Allowed');
     }
   });
 });
+
+app.post('/api/token', (req, res) => {
+  const refreshToken = req.body.token;
+  if (refreshToken == null) {
+    return res.status(401).send('No token in request');
+  }
+  if (refreshTokens.includes(refreshToken)) {
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).send('refresh token exist');
+      }
+      const accessToken = generateAccessToken({ userName: user.userName });
+      res.json({ accessToken: accessToken });
+    })
+  }
+})
+
+app.delete('/api/token', (req, res) => {
+  refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+  res.status(204);
+})
+
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) {
+    return res.status(401).send('Not Allowed');
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).send('Invalid Token');
+    }
+    req.user = user;
+    next();
+  })
+}
+
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+}
 
 
 const port = 5000;
