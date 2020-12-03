@@ -31,6 +31,10 @@ app.get('/api/songs/:artistName', authenticateToken, (req, res) => {
 
 app.post('/api/users', async (req, res) => {
   try {
+    let users = await usersRepository.getUser(req.body.user.userName);
+    if (users && users.length > 0) {
+      return res.status(403).send('A user with the same use name is already defined');
+    }
     const salt = await bcrypt.genSalt();
     const hashedPass = await bcrypt.hash(req.body.user.password, salt);
     req.body.user.password = hashedPass;

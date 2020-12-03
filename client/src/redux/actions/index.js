@@ -9,10 +9,16 @@ export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
 export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART'
 export const REMOVE_ITUNE_FROM_CART = 'REMOVE_ITUNE_FROM_CART'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
+
+export const SET_CREATE_USER_ERROR = 'SET_CREATE_USER_ERROR'
+export const RESET_USER = 'RESET_USER'
 /*
  * action creators
 */
 
+export const error = (message) => {
+    return { type: 'ERROR', message };
+}
 
 export const getSongsList = (query) => dispatch => {
     let url = '/api/songs/' + query.song;
@@ -29,12 +35,24 @@ export const getSongsList = (query) => dispatch => {
 
 export const createUser = (user) => dispatch => {
     return axios.post('/api/users', { user: user })
-        .then(userName => dispatch({ type: CREATE_USER, payload: userName }))
+        .then(res => {
+            dispatch({ type: CREATE_USER, payload: res })
+        }, error => {
+            if (error.response.status == 403) {
+                dispatch({ type: SET_CREATE_USER_ERROR, payload: error });
+            };
+        })
+}
+
+export const resetUser = () => dispatch => {
+    dispatch({ type: RESET_USER, payload: {} })
 }
 
 export const addItemToCart = (itune) => dispatch => {
     dispatch({ type: ADD_ITEM_TO_CART, payload: itune })
 }
+
+
 
 
 export const removeItemFromCart = (itune) => dispatch => {
