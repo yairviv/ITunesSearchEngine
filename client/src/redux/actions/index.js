@@ -4,14 +4,17 @@ import axios from 'axios';
  * action types
 */
 export const GET_SONGS_LIST = 'GET_SONGS_LIST'
-export const CREATE_USER = 'CREATE_USER'
 export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
 export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART'
 export const REMOVE_ITUNE_FROM_CART = 'REMOVE_ITUNE_FROM_CART'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 
+export const CREATE_USER = 'CREATE_USER'
 export const SET_CREATE_USER_ERROR = 'SET_CREATE_USER_ERROR'
 export const RESET_USER = 'RESET_USER'
+export const LOGIN = 'LOGIN'
+export const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
+
 /*
  * action creators
 */
@@ -28,9 +31,14 @@ export const getSongsList = (query) => dispatch => {
     if (query.entity !== undefined) {
         url = url + `&entity=${query.entity}`;
     }
-    return fetch(url)
-        .then(res => res.json())
-        .then(songs => dispatch({ type: GET_SONGS_LIST, payload: songs.results }))
+    return axios.get(url)
+        .then(res => {
+            let songs = res.json();
+            dispatch({ type: GET_SONGS_LIST, payload: songs.results })
+        }, error => {
+            dispatch({ type: SET_CREATE_USER_ERROR, payload: error });
+
+        })
 }
 
 export const createUser = (user) => dispatch => {
@@ -38,9 +46,17 @@ export const createUser = (user) => dispatch => {
         .then(res => {
             dispatch({ type: CREATE_USER, payload: res })
         }, error => {
-            if (error.response.status == 403) {
-                dispatch({ type: SET_CREATE_USER_ERROR, payload: error });
-            };
+            dispatch({ type: SET_CREATE_USER_ERROR, payload: error });
+
+        })
+}
+
+export const login = (user) => dispatch => {
+    return axios.post('/api/login', { user: user })
+        .then(res => {
+            dispatch({ type: LOGIN, payload: res })
+        }, error => {
+            dispatch({ type: SET_LOGIN_ERROR, payload: error });
         })
 }
 

@@ -17,6 +17,7 @@ function manageUsers(state = initialState.user, action) {
                 type: 'alert-error',
                 message: action.payload.response.data
             }
+            
         default: return state
     }
 }

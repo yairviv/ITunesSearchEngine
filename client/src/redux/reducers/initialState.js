@@ -7,5 +7,9 @@ export default {
   settings: {
     limit: 25,
     entity: undefined
+  },
+  loginStatus: {
+    type: '',
+    message: ''
   }
 };

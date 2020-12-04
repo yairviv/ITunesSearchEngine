@@ -2,17 +2,35 @@ import React, { useState } from 'react';
 import SongsListInput from './SongsListInput';
 import SongsListView from './SongsListView';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { connect } from 'react-redux';
 import './Songs.css'
 
-function Container() {
+const mapStateToProps = (state) => {
+    return {
+        authError: state.loginReducer || {
+            type: '',
+            message: ''
+        }
+    }
+}
+function Container(props) {
     const [progressBarFlag, setprogressBarFlag] = useState(false);
+    const [open, setOpen] = React.useState(false);
+
 
     function clickHandler() {
-        setprogressBarFlag(true);
+        setOpen(true);
+        if (props.authError.type == 'ok') {
+            setprogressBarFlag(true);
+        }
     };
     function listRefreshed() {
         setprogressBarFlag(false);
     };
+
+    const handleClose = () => {
+        setOpen(false);
+    }
     function showProgress() {
         if (progressBarFlag) {
             return <span className='spinner'><CircularProgress /></span>;
@@ -29,8 +47,8 @@ function Container() {
                 </div>
             </div>
             <div>
-                <SongsListView onListRefresh={listRefreshed} /></div>
+                <SongsListView onListRefresh={listRefreshed} open={open} handleClose={handleClose} /></div>
         </div>
     );
 }
-export default Container
+export default connect(mapStateToProps, null)(Container)

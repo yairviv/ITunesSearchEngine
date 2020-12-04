@@ -12,7 +12,7 @@ import Alert from '@material-ui/lab/Alert';
 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    createUser: (userName) => dispatch(createUser(userName)),
+    createUser: (user) => dispatch(createUser(user)),
     resetUser: () => dispatch(resetUser()),
 });
 
@@ -54,10 +54,12 @@ function RegisterDialog(props) {
             setErrorFlagUser(true);
             return;
         }
+        setErrorFlagUser(false);
         if (passwordItem.trim() === '') {
             setErrorFlagPassword(true);
             return;
         }
+        setErrorFlagPassword(false);
 
         props.createUser({ userName: userItem, password: passwordItem });
 
@@ -69,6 +71,8 @@ function RegisterDialog(props) {
 
     const onEnter = () => {
         props.resetUser();
+        setUserItem('');
+        setPasswordItem('');
     }
 
     return (

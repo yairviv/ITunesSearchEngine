@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import { createUser } from '../../redux/actions/index';
+import { login } from '../../redux/actions/index';
 import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,34 +11,61 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Alert from '@material-ui/lab/Alert';
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    createUser: (userName) => dispatch(createUser(userName)),
+    login: (user) => dispatch(login(user)),
 });
+
+
+const mapStateToProps = (state) => {
+    return {
+        loginStatus: state.loginReducer || {
+            type: '',
+            message: ''
+        }
+    }
+}
 function LoginDialog(props) {
     const [open, setOpen] = React.useState(false);
-    const [item, setItem] = useState('');
-    const [errorFlag, setErrorFlag] = useState(false);
+    const [userItem, setUserItem] = useState('');
+    const [passwordItem, setPasswordItem] = useState('');
+    const [errorFlagUser, setErrorFlagUser] = useState(false);
+    const [errorFlagPassword, setErrorFlagPassword] = useState(false);
 
-    function changeHandler(e) {
-        setItem(e.target.value);
+
+
+    function userChangeHandler(e) {
+        setUserItem(e.target.value);
     };
+
+    function passwordChangeHandler(e) {
+        setPasswordItem(e.target.value);
+    };
+
+
     const handleClickOpen = () => {
-        setErrorFlag(false);
+        setErrorFlagUser(false);
+        setErrorFlagPassword(false);
         setOpen(true);
     };
 
-    const handleSubscribeClose = () => {
-        if (item.trim() !== '') {
-            props.createUser(item);
-            setErrorFlag(false);
-            setOpen(false);
-        } else {
-            setErrorFlag(true);
+    function handleSubscribe() {
+        if (userItem.trim() === '') {
+            setErrorFlagUser(true);
+            return;
         }
+        setErrorFlagUser(false);
+        if (passwordItem.trim() === '') {
+            setErrorFlagPassword(true);
+            return;
+        }
+        setErrorFlagPassword(false);
+        props.login({ userName: userItem, password: passwordItem });
+
     };
 
     const handleCancleClose = () => {
         setOpen(false);
     };
+
 
     return (
         <div>
@@ -46,37 +73,65 @@ function LoginDialog(props) {
                 Login
       </Button>
             <Dialog open={open} onClose={handleCancleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To enjoy better user experience from this website, please enter a user name here.
+                <DialogTitle id="form-dialog-title">Login</DialogTitle>
+                {props.loginStatus.type != 'ok' &&
+                    <DialogContent>
+                        <DialogContentText>
+                            Please enter a user name and password
           </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="User Name"
-                        type="email"
-                        fullWidth
-                        onChange={changeHandler}
-                    />
-                    {errorFlag > 0 &&
-                        <div>
-                            <Alert severity="error">Pleas fill in user name</Alert>
-                        </div>
-                    }
-                </DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="User Name"
+                            type="email"
+                            fullWidth
+                            onChange={userChangeHandler}
+                        />
+                        {errorFlagUser == true &&
+                            <div>
+                                <Alert severity="error">Pleas fill in user name</Alert>
+                            </div>
+                        }
+                        <TextField
+                            margin="dense"
+                            id="name"
+                            label="Password"
+                            type="email"
+                            fullWidth
+                            onChange={passwordChangeHandler}
+                        />
+                        {errorFlagPassword == true &&
+                            <div>
+                                <Alert severity="error">Pleas fill in Password</Alert>
+                            </div>
+                        }
+
+                    </DialogContent>
+                }
+                {props.loginStatus.type == 'ok' &&
+                    <DialogContent>Loged in successful!</DialogContent>
+                }
                 <DialogActions>
-                    <Button onClick={handleCancleClose} color="primary">
-                        Cancel
+                    {props.loginStatus.type != 'ok' &&
+                        <Button onClick={handleCancleClose} color="primary">
+                            Cancel
           </Button>
-                    <Button onClick={handleSubscribeClose} color="primary">
-                        Subscribe
+                    }
+                    {props.loginStatus.type != 'ok' &&
+                        <Button onClick={handleSubscribe} color="primary">
+                            Login
           </Button>
+                    }
+                    {props.loginStatus.type == 'ok' &&
+                        <Button onClick={handleCancleClose} color="primary">
+                            Close
+          </Button>
+                    }
                 </DialogActions>
             </Dialog>
         </div>
     );
 }
 
-export default connect(null, mapDispatchToProps)(LoginDialog)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginDialog)

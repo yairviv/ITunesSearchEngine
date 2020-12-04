@@ -11,7 +11,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     getSongs: (item) => dispatch(getSongsList(item)),
 });
 const mapStateToProps = (state) => {
-    return { settings: state.settings || { limit: 25 } }
+    return {
+        settings: state.settings || { limit: 25 },
+        authError: state.loginReducer || {
+            type: '',
+            message: ''
+        }
+    }
 }
 
 function SongsListInput(props) {
@@ -28,14 +34,16 @@ function SongsListInput(props) {
         setItem(e.target.value);
     };
     function SearchClickHandler() {
-        if (item.trim() !== '') {
-            props.getSongs({ song: item, limit: props.settings.limit, entity: props.settings.entity });
-            props.onClick();
-            setErrorFlag(false);
-            fillSearchHistory(item);
-        } else {
-            setErrorFlag(true);
+        if (props.authError.type == 'ok') {
+            if (item.trim() !== '') {
+                props.getSongs({ song: item, limit: props.settings.limit, entity: props.settings.entity });
+                setErrorFlag(false);
+                fillSearchHistory(item);
+            } else {
+                setErrorFlag(true);
+            }
         }
+        props.onClick();
     }
     function fillSearchHistory(item) {
         if (!userItems || !userItems.items || userItems == null) {
