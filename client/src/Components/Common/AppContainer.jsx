@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; import {
+import React, { useState, useEffect } from 'react'; import {
     BrowserRouter as Router, Switch,
     Route
 } from 'react-router-dom';
@@ -13,10 +13,17 @@ function AppContainer() {
     const [headerFlags, setheaderFlags] = useState({
         disableUserSearchesButton: false
     });
+
+    useEffect(checkForUser);
+
     const headerOptions = {
         data: headerFlags,
         changeFlags: (value) => setheaderFlags({ disableUserSearchesButton: value }),
     }
+
+    const checkForUser = () => {
+
+    };
 
     return (
         <Router> <div>

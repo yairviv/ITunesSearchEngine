@@ -1,6 +1,6 @@
 export default {
   songs: [],
-  user: '',
+  user: {},
   cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {
     items: []
   },

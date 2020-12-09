@@ -1,4 +1,4 @@
-import { CREATE_USER, SET_CREATE_USER_ERROR, RESET_USER } from '../actions/index'
+import { CREATE_USER, SET_CREATE_USER_ERROR, RESET_USER, SET_LOGGED_IN_USER, SET_NOT_LOGGED_IN_USER } from '../actions/index'
 import initialState from './initialState'
 function manageUsers(state = initialState.user, action) {
     switch (action.type) {
@@ -17,7 +17,15 @@ function manageUsers(state = initialState.user, action) {
                 type: 'alert-error',
                 message: action.payload.response.data
             }
-            
+        case SET_LOGGED_IN_USER:
+            user = action.payload.user;
+            return user;
+        case SET_NOT_LOGGED_IN_USER:
+            return {
+                type: 'alert-error',
+                message: action.payload.response.data
+            }
+
         default: return state
     }
 }

@@ -1,4 +1,4 @@
-import { LOGIN, SET_LOGIN_ERROR } from '../actions/index'
+import { LOGIN, SET_LOGIN_ERROR, REFRESH_TOKEN } from '../actions/index'
 import initialState from './initialState'
 function manageLogin(state = initialState.loginStatus, action) {
     switch (action.type) {
@@ -14,6 +14,12 @@ function manageLogin(state = initialState.loginStatus, action) {
                 type: 'alert-error',
                 message: action.payload.response.data
             }
+        case REFRESH_TOKEN:
+            document.cookie = `accessToken=${action.payload.data.accessToken}`;
+            return {
+                type: 'ok',
+                message: ''
+            };
         default: return state
     }
 }

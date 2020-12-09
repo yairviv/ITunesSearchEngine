@@ -109,8 +109,13 @@ function authenticateToken(req, res, next) {
   })
 }
 
+app.get('/api/isLoggedIn', authenticateToken, async (req, res) => {
+  let users = await usersRepository.getUser(req.body.user.userName);
+  res.send({ userName: users[0].userName });
+});
+
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '300s' });
 }
 
 

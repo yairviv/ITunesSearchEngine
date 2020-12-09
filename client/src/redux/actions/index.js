@@ -14,6 +14,9 @@ export const SET_CREATE_USER_ERROR = 'SET_CREATE_USER_ERROR'
 export const RESET_USER = 'RESET_USER'
 export const LOGIN = 'LOGIN'
 export const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
+export const REFRESH_TOKEN = 'REFRESH_TOKEN'
+export const SET_LOGGED_IN_USER = 'REFRESH_TOKEN'
+export const SET_NOT_LOGGED_IN_USER = 'REFRESH_TOKEN'
 
 /*
  * action creators
@@ -24,6 +27,10 @@ export const error = (message) => {
 }
 
 export const getSongsList = (query) => dispatch => {
+    const token = getCookie('accessToken');
+    if (token) {
+        setHeader('Authorization', `Bearer ${token}`);
+    }
     let url = '/api/songs/' + query.song;
     if (query.limit !== undefined) {
         url = url + `&limit=${query.limit}`;
@@ -33,8 +40,7 @@ export const getSongsList = (query) => dispatch => {
     }
     return axios.get(url)
         .then(res => {
-            let songs = res.json();
-            dispatch({ type: GET_SONGS_LIST, payload: songs.results })
+            dispatch({ type: GET_SONGS_LIST, payload: res.data.results })
         }, error => {
             dispatch({ type: SET_CREATE_USER_ERROR, payload: error });
 
@@ -51,6 +57,16 @@ export const createUser = (user) => dispatch => {
         })
 }
 
+export const checkUserLogin = () => dispatch => {
+    return axios.post('/api/isLoggedIn')
+        .then(res => {
+            dispatch({ type: SET_LOGGED_IN_USER, payload: res })
+        }, error => {
+            dispatch({ type: SET_NOT_LOGGED_IN_USER, payload: error });
+
+        })
+}
+
 export const login = (user) => dispatch => {
     return axios.post('/api/login', { user: user })
         .then(res => {
@@ -58,6 +74,18 @@ export const login = (user) => dispatch => {
         }, error => {
             dispatch({ type: SET_LOGIN_ERROR, payload: error });
         })
+}
+
+export const refreshToken = () => dispatch => {
+    const refreshToken = getCookie('refreshToken');
+    if (token) {
+        return axios.post('/api/token', { token: refreshToken })
+            .then(res => {
+                dispatch({ type: REFRESH_TOKEN, payload: res })
+            }, error => {
+                dispatch({ type: SET_LOGIN_ERROR, payload: error });
+            })
+    }
 }
 
 export const resetUser = () => dispatch => {
@@ -81,6 +109,37 @@ export const removeItuneFromCart = (itune) => dispatch => {
 
 export const updateSettings = (settingsObj) => dispatch => {
     dispatch({ type: UPDATE_SETTINGS, payload: settingsObj })
+}
+
+function getCookie(key) {
+    var value =
+        decodeURIComponent(
+            document.cookie.replace(
+                new RegExp(
+                    '(?:(?:^|.*;)\\s*' +
+                    encodeURIComponent(key).replace(/[\\-\\.\\+\\*]/g, '\\$&') +
+                    '\\s*\\=\\s*([^;]*).*$)|^.*$'
+                ),
+                '$1'
+            )
+        ) || null;
+
+    if (
+        value &&
+        value.substring(0, 1) === '{' &&
+        value.substring(value.length - 1, value.length) === '}'
+    ) {
+        try {
+            value = JSON.parse(value);
+        } catch (e) {
+            return value;
+        }
+    }
+    return value;
+};
+
+function setHeader(name, value) {
+    axios.defaults.headers.common[name] = value;
 }
 /*
 export const updateSong = (song) => dispatch => {
